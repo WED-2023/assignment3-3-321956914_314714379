@@ -37,24 +37,17 @@ export default {
     async updateRecipes() {
       try {
         const response = await this.axios.get(
-          "https://api.spoonacular.com/recipes/random",
-          {
-            params: {
-              limitLicense: true,
-              number: 3,
-              apiKey: 'b7b147413c244375812ccb826d79cdcc'
-            }
-          }
+          "http://localhost:3000/api/recipes/random"
         );
 
         console.log("response: ", response);
-        const recipes = response.data.recipes.map((r) => {
+        const recipes = response.data.map((r) => {
           return {
             id: r.id,
-            title: r.title,
-            readyInMinutes: r.readyInMinutes,
+            title: r.name,
+            readyInMinutes: r.preparationTime,
             image: r.image,
-            aggregateLikes: r.aggregateLikes
+            aggregateLikes: r.popularity
           };
         });
         this.recipes = [];

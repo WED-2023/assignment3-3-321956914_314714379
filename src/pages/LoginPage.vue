@@ -45,13 +45,13 @@ export default {
       if (await v$.value.$validate()) {
         // קריאה לשרת
         try {
-          await window.axios.post(`http://localhost:3000/api/login`, {
+          await window.axios.post(`${window.store.server_domain}/api/login`, {
             username: state.username,
             password: state.password
           });
           console.log("Logging in with:", state.username, state.password);
           window.store.login(state.username);
-          window.router.push('/main');
+          window.router.push('/');
         } catch (err) {
             const message = err.response?.data?.message || 'Login failed. Please check your username and password.';
             window.toast('Login Failed', message, 'danger');

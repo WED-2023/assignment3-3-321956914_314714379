@@ -13,7 +13,7 @@
         <label>Password:</label>
         <input v-model="state.password" type="password" class="form-control" />
         <div v-if="v$.password.$error" class="text-danger">
-          Password is required (at least 6 characters).
+          Password is required .
         </div>
       </div>
       <button type="submit" class="btn btn-primary mt-3">Login</button>
@@ -24,7 +24,7 @@
 <script>
 import { reactive } from 'vue';
 import { useVuelidate } from '@vuelidate/core';
-import { required, minLength } from '@vuelidate/validators';
+import { required } from '@vuelidate/validators';
 
 export default {
   name: "LoginPage",
@@ -36,7 +36,7 @@ export default {
 
     const rules = {
       username: { required },
-      password: { required, minLength: minLength(6) },
+      password: { required },
     };
 
     const v$ = useVuelidate(rules, state);
@@ -45,14 +45,16 @@ export default {
       if (await v$.value.$validate()) {
         // קריאה לשרת
         try {
-          await window.axios.post('/login', {
+          await window.axios.post(`http://localhost:3000/api/login`, {
             username: state.username,
             password: state.password
           });
+          console.log("Logging in with:", state.username, state.password);
           window.store.login(state.username);
           window.router.push('/main');
         } catch (err) {
-          window.toast("Login failed", err.response.data.message, "danger");
+            const message = err.response?.data?.message || 'Login failed. Please check your username and password.';
+            window.toast('Login Failed', message, 'danger');
         }
       }
     };

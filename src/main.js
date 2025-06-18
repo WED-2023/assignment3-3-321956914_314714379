@@ -62,5 +62,9 @@ app.config.globalProperties.toast = function (title, content, variant = null, ap
     toast.remove();
   }, 3000);
 };
+window.toast = app.config.globalProperties.toast;
+window.store = store;
+window.axios = axios;
+window.router = router;
 
 app.mount('#app');
